@@ -1,4 +1,8 @@
 # didier deshommes
+
+cdef extern from "scopehandle.h":
+    void HANDLESCOPE() 
+
 cdef extern from "include/v8.h":
     ctypedef struct c_handlescope "v8::HandleScope":
         pass
@@ -21,11 +25,9 @@ cdef class Value:
     def __cinit__(self):
         """  
         Create a Context() 
-        """ 
-        cdef int p = 0 
-        cdef c_handlescope h          
-        c_create_handle(<void*>p)
-
+        """
+        HANDLESCOPE()
+        
     def set_value(self,int val):
         pass
         #cdef c_value r = <c_value>cstring_factory('2',1)
