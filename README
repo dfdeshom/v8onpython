@@ -15,14 +15,14 @@ Building it
 -----------
 $ python setup.py build_ext --inplace
 
-This should build v8module.so 
+This should build v8onpython.so
 
 Usage
 -----
 After building it, import it.
 
->>> import v8module
->>> v = v8module.Script()
+>>> import v8onpython
+>>> v = v8onpython.Script()
 >>> js_code = "for (i=0;i<100000000;i++){\n j=i+1\n}"
 >>> v.compile(js_code)
 '1000000'

@@ -39,7 +39,7 @@ cdef extern from "v8.h":
     
 
 # Helpers
-cdef extern from "scopehandle.h":
+cdef extern from "helpers.h":
     void HANDLESCOPE() 
     void ATTACH_SCOPE_TO_CONTEXT(c_context (c))
     c_value RUN_SCRIPT(c_script (s))
