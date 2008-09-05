@@ -1,4 +1,5 @@
 # didier deshommes <dfdeshom@gmail.com>
+# didier deshommes <dfdeshom@gmail.com>
 # BSD license
 
 cdef extern from "v8.h":
@@ -50,6 +51,7 @@ cdef class Script:
         """  
         Create a Context() 
         """
+        # Create a new context
         self.context = c_context_factory()
         pass
     
@@ -60,10 +62,7 @@ cdef class Script:
         """
         # handle scope
         HANDLESCOPE()
-        
-        # Create a new context
-        #cdef c_context context = c_context_factory()
-                
+                        
         # Context scope 
         ATTACH_SCOPE_TO_CONTEXT(self.context) 
         #cdef c_scope scope = 
