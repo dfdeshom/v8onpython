@@ -2,7 +2,8 @@ What is it?
 -----------
 This is a small module that runs Javascript code go Google's V8 engine.
 The module takes any valid Javascript string, compiles it, runs and returns the result of 
-the of the command as a (Python) string object. Think of this as eval() in Python
+the of the command as a (Python) string object. Think of this as eval() in Python.
+This is released under the BSD license.
 
 Prerequisites
 -------------
@@ -33,4 +34,13 @@ That's all! Note that something horrible happens when anything goes wrong with t
 >>> v.compile("2.w")
 <unknown>:0: Uncaught SyntaxError: Unexpected token ILLEGAL
 Segmentation fault
+
+What would be cool
+------------------
+* Code contributions
+
+* Performance numbers of CPython vs JS on V8.
+
+* expand this and make Python and JS talk faster using native strings, integers
+  objects, etc
 
