@@ -1,4 +1,5 @@
-// didier deshommes
+// didier deshommes <dfdeshom@gmail.com>
+// BSD license
 #include "include/v8.h"
 #define HANDLESCOPE() v8::HandleScope scope
 #define ATTACH_SCOPE_TO_CONTEXT(context)  v8::Context::Scope s = v8::Context::Scope (context)

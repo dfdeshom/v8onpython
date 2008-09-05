@@ -1,4 +1,5 @@
-# didier deshommes
+# didier deshommes <dfdeshom@gmail.com>
+# BSD license
 
 cdef extern from "v8.h":
     # Context
@@ -36,37 +37,43 @@ cdef extern from "v8.h":
     c_script c_script_compile "v8::Script::Compile"(c_string c)
     
 
+# Helpers
 cdef extern from "scopehandle.h":
     void HANDLESCOPE() 
     void ATTACH_SCOPE_TO_CONTEXT(c_context (c))
     c_value RUN_SCRIPT(c_script (s))
 
-cdef class Value:
-    #cdef c_context context
-    
+cdef class Script:
+    cdef c_context context 
+
     def __cinit__(self):
         """  
         Create a Context() 
         """
+        self.context = c_context_factory()
         pass
-        
+    
+
     def compile(self,code):
-        
+        """
+        Compile, run and return JS code from V8 
+        """
         # handle scope
         HANDLESCOPE()
         
         # Create a new context
-        cdef c_context context = c_context_factory()
+        #cdef c_context context = c_context_factory()
                 
         # Context scope 
-        ATTACH_SCOPE_TO_CONTEXT(context) 
-        #cdef c_scope scope = c_scope_factory(context)
+        ATTACH_SCOPE_TO_CONTEXT(self.context) 
+        #cdef c_scope scope = 
+        #c_scope_factory(context)
          
         # Create a string object to store the source
         cdef c_string clone = c_string_factory(code)
                 
         # Create a script object and compile it
-        cdef c_script script = (c_script_compile(clone))
+        cdef c_script script = c_script_compile(clone)
         
         # Run it
         cdef c_value result
