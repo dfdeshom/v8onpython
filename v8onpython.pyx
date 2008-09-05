@@ -20,12 +20,15 @@ cdef extern from "v8.h":
     ctypedef struct c_value "v8::Handle<v8::Value>":
         pass
 
-
     # String
     ctypedef struct c_string "v8::Handle<v8::String>":
         pass
     c_string c_string_factory "v8::String::New"(char *s)
-    c_string ascii "v8::String::AsciiValue" (c_value c)
+    
+    # Ascii
+    ctypedef struct c_ascii "v8::String::AsciiValue":
+        void (* to_str "operator*") ()
+    c_ascii c_ascii_factory "v8::String::AsciiValue" (c_value c)
 
     # Script
     ctypedef struct c_script "v8::Handle<v8::Script>":
@@ -37,7 +40,6 @@ cdef extern from "scopehandle.h":
     void HANDLESCOPE() 
     void ATTACH_SCOPE_TO_CONTEXT(c_context (c))
     c_value RUN_SCRIPT(c_script (s))
-    void ascii(c_value,char *res)
 
 cdef class Value:
     #cdef c_context context
@@ -47,39 +49,30 @@ cdef class Value:
         Create a Context() 
         """
         pass
-        # Create a handle scope
-        #HANDLESCOPE()
-        
-        # Create a new context
-        #c_context_factory()
-
-        # New scope
         
     def compile(self,code):
         
         # handle scope
         HANDLESCOPE()
-        #print 'done 1'
         
         # Create a new context
         cdef c_context context = c_context_factory()
-        #print 'done 2'
-        
+                
         # Context scope 
         ATTACH_SCOPE_TO_CONTEXT(context) 
         #cdef c_scope scope = c_scope_factory(context)
-        #print 'done 3'
- 
+         
         # Create a string object to store the source
-        cdef c_string clone = c_string_factory("'a'")
-        #print 'done 4'
-        
-        # Create a script object
+        cdef c_string clone = c_string_factory(code)
+                
+        # Create a script object and compile it
         cdef c_script script = (c_script_compile(clone))
-        cdef c_value result = RUN_SCRIPT(script)
-        cdef char *res
-        ascii(result ,*res)
-        s = str(*res)
+        
+        # Run it
+        cdef c_value result
+        result = RUN_SCRIPT(script)
+        
+        # Print out the result
+        s = str(<char*>c_ascii_factory(result).to_str())
         return s
-       #script.Run()
          
