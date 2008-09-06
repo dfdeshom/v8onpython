@@ -1,5 +1,4 @@
 # didier deshommes <dfdeshom@gmail.com>
-# didier deshommes <dfdeshom@gmail.com>
 # BSD license
 
 cdef extern from "v8.h":
@@ -35,7 +34,12 @@ cdef extern from "v8.h":
     # Script
     ctypedef struct c_script "v8::Handle<v8::Script>":
         void (* Run) ()
+        void (* IsEmpty) ()
     c_script c_script_compile "v8::Script::Compile"(c_string c)
+
+    # Exceptions
+    ctypedef struct c_try_catch "v8::TryCatch":
+        void (* Exception) ()
     
 
 # Helpers
@@ -43,7 +47,7 @@ cdef extern from "helpers.h":
     void HANDLESCOPE() 
     void ATTACH_SCOPE_TO_CONTEXT(c_context (c))
     c_value RUN_SCRIPT(c_script (s))
-
+        
 cdef class Script:
     cdef c_context context 
 
@@ -62,10 +66,14 @@ cdef class Script:
         """
         # handle scope
         HANDLESCOPE()
-                        
+
+        # set up exception mechanism
+        cdef c_try_catch _try
+        cdef c_value _try_result
+        
         # Context scope 
         ATTACH_SCOPE_TO_CONTEXT(self.context) 
-        #cdef c_scope scope = 
+        #cdef c_scope scope =  
         #c_scope_factory(context)
          
         # Create a string object to store the source
@@ -73,6 +81,11 @@ cdef class Script:
                 
         # Create a script object and compile it
         cdef c_script script = c_script_compile(clone)
+        
+        if <bint>script.IsEmpty():
+            _try_result = <c_value>_try.Exception()
+            _exception = str(<char*>c_ascii_factory(_try_result).to_str())
+            return _exception
         
         # Run it
         cdef c_value result
