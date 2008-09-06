@@ -29,12 +29,10 @@ After building it, import it.
 '1000000'
 >>> v.compile("'Hello' + ', World!'")
 'Hello, World!'
+>>> v.compile("1.32w")
+>>> 'SyntaxError: Unexpected token ILLEGAL'
 
-
-That's all! Note that something horrible happens when anything goes wrong with this:
->>> v.compile("2.w")
-<unknown>:0: Uncaught SyntaxError: Unexpected token ILLEGAL
-Segmentation fault
+That's all! 
 
 What would be cool
 ------------------
